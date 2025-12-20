@@ -1,215 +1,137 @@
-🛡️ SOC Home Lab Setup – End-to-End
+🛡️ SOC Home Lab – Wazuh SIEM
 
+🚀 About This Project:
 
+This repository documents my SOC (Security Operations Center) Home Lab, built to understand how a real SOC works.
 
-📌 Overview:
+I use Wazuh SIEM to collect and analyze logs from Windows and Linux machines, simulate attacks using Kali Linux, and practice alert triage, incident response, and MITRE ATT&CK mapping.
 
-This repository documents the complete setup of my SOC Home Lab, built to practice real-world SOC workflows and support the following projects:
+This project is created for entry-level SOC / Blue Team roles (SOC L1).
 
-1.SOC Alert Monitoring & Incident Simulation
+🧩 Lab Setup
 
-2.Network Traffic Analysis using Wireshark
+Virtual Machines Used:
 
-3.Defense-in-Depth Lab (Firewall + IDS + Honeypot)
+Kali Linux – Attacker
 
+Metasploitable 2 – Linux target
 
+Windows 7 – Windows endpoint
 
+Ubuntu Server – Wazuh SIEM
 
 
-The lab is built using VMware Workstation with isolated networking to safely simulate attacks, detections, and investigations.
+🌐 Network Topology:
 
+Kali Linux
 
+   |
+   
+   v
+   
+Metasploitable 2 ---> Wazuh SIEM <--- Windows 7
 
+🛠️ Tools & Skills:
 
-🖥️ Lab Architecture:
+Wazuh SIEM
 
-| VM               | Role                   | Operating System | Network Mode |
-| ---------------- | ---------------------- | ---------------- | ------------ |
-| Kali Linux       | Attacker / SOC Analyst | Kali Linux       | Host-Only    |
-| Windows 7        | Endpoint / Victim      | Windows 7        | Host-Only    |
-| Metasploitable 2 | Vulnerable Server      | Ubuntu-based     | Host-Only    |
+Linux & Windows Event Logs
 
+Kali Linux (Hydra, PowerShell)
 
+MITRE ATT&CK
 
+Alert Triage & Incident Response
 
-🔒 Security Note:
 
-All vulnerable machines are isolated using Host-Only networking to prevent exposure to the internet or production systems.
+🔄 SOC Workflow I Practiced:
 
+Log collection from endpoints
 
+SIEM parsing and alert generation
 
-🌐 Network Configuration (VMware Network Settings):
-
-Adapter: Host-Only
-
-Internet: Disabled for target machines
-
-Kali can temporarily use NAT for tool downloads
-
-Example IP Scheme (Masked)
-Kali Linux        : 192.168.56.10
-Windows 7         : 192.168.56.20
-Metasploitable 2  : 192.168.56.30
-
-
-
-
-🔹 Project 1: SOC Alert Monitoring & Incident Simulation
-
-🎯 Objective:
-
-Simulate a mini SOC using Wazuh SIEM, Sysmon, and MITRE ATT&CK to detect, triage, and document security incidents.
-
-Step 1: Install Wazuh Manager on Kali Linux
-curl -sO https://packages.wazuh.com/4.7/wazuh-install.sh
-sudo bash wazuh-install.sh -a
-
-
-Access dashboard:
-
-https://<kali-ip>
-
-Step 2: Install Wazuh Agent on Windows 7
-
-Download Wazuh Agent for Windows
-
-During installation:
-
-Manager IP: Kali IP
-
-Agent name: Windows7-Endpoint
-
-Start agent service:
-
-net start WazuhSvc
-
-Step 3: Install Sysmon on Windows 7
-sysmon64.exe -accepteula -i sysmonconfig.xml
-
-
-Sysmon logs:
-
-Process creation
-
-Network connections
-
-Registry changes
-
-Logs are forwarded to Wazuh for correlation.
-
-Step 4: Simulate Attacks
-
-From Kali Linux:
-
-nmap -sS -A 192.168.56.20
-hydra -l admin -P rockyou.txt 192.168.56.20 ssh
-
-Step 5: SOC Workflow Practice
-
-Alert detection in Wazuh
-
-Alert triage (True / False Positive)
-
-MITRE ATT&CK mapping:
-
-T1046 – Network Service Discovery
-
-T1110 – Brute Force
-
-Incident report creation
-
-📁 Folder:
-
-SOC-Incident-Reports/
-
-
-
-
-🔹 Project 2: Network Traffic Analysis using Wireshark
-
-🎯 Objective:
-
-Detect scanning, brute-force, and anomalous traffic.
-
-Step 1: Capture Traffic
-sudo wireshark
-
-
-Interface:
-
-vmnet1 (Host-Only)
-
-Step 2: Generate Malicious Traffic
-nmap -p- 192.168.56.30
-hydra -l msfadmin -P rockyou.txt 192.168.56.30 ftp
-
-Step 3: Analyze PCAP
-
-SYN scans
-
-Repeated authentication attempts
-
-Protocol anomalies
-
-📁 Folder:
-
-Network-Traffic-Analysis/
-├── attack.pcapng
-└── analysis-report.md
-
-
-
-
-🔹 Project 3: Defense-in-Depth Lab (Firewall + IDS + Honeypot)
-
-🎯 Objective:
-
-Implement layered defenses and study detection and evasion techniques.
-
-Firewall Configuration (Kali)
-sudo ufw enable
-sudo ufw deny 21
-sudo ufw allow ssh
-
-IDS Setup – Snort
-sudo apt install snort -y
-sudo snort -A console -q -c /etc/snort/snort.conf -i eth0
-
-Honeypot Setup – Cowrie
-sudo apt install cowrie -y
-
-
-Detects:
-
-SSH brute-force
-
-Credential harvesting
-
-📁 Folder:
-
-Defense-in-Depth/
-├── snort-alerts.log
-├── cowrie-logs/
-└── detection-summary.md
-
-
-
-
-🎯 Skills Demonstrated:
-
-SOC L1 / L2 workflows
-
-SIEM alert triage
+Alert triage (SOC L1 level)
 
 MITRE ATT&CK mapping
 
-Log analysis
+Incident investigation
 
-Network traffic analysis
+Documentation and reporting
 
-Incident documentation
 
-📌 Disclaimer:
+🧪 Use Cases Implemented:
 
-This lab is for educational purposes only.
-All activities are performed in an isolated environment on intentionally vulnerable systems.
+🔐 SSH Brute Force Detection (Linux)
+
+Target: Metasploitable 2
+
+Logs: /var/log/auth.log
+
+Detection: Multiple failed SSH login attempts
+
+MITRE: T1110 – Brute Force
+
+
+🪟 Windows Authentication Monitoring
+
+Event ID 4625 – Failed logon
+
+Event ID 4672 – Admin privileges assigned
+
+MITRE:
+
+T1110 – Brute Force
+
+T1068 – Privilege Escalation
+
+
+⚡ PowerShell Attack Detection
+
+Event ID 4104 – Script Block Logging
+
+Encoded PowerShell command detected
+
+MITRE: T1059.001 – PowerShell
+
+
+🧠 What I Learned
+
+How SIEM collects and correlates logs
+
+How SOC analysts triage alerts
+
+How attacks look in logs
+
+How to map detections to MITRE ATT&CK
+
+How to write SOC-style incident notes
+
+
+📂 Repository Structure
+
+SOC-Wazuh-HomeLab
+
+├── README.md
+
+├── architecture
+
+├── projects
+
+├── mitre-mapping
+
+└── screenshots
+
+
+💼 Resume-Ready Line:
+
+Built a SOC home lab using Wazuh SIEM to monitor Windows and Linux systems, detect brute-force and PowerShell attacks, perform alert triage, map events to MITRE ATT&CK, and document incidents.
+
+
+👤 About Me
+
+Parijat Das
+Aspiring SOC Analyst
+
+GitHub: https://github.com/DParijat07
+
+LinkedIn: https://linkedin.com/in/parijat-das-699586216/
