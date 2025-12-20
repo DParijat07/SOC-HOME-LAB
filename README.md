@@ -94,7 +94,7 @@ Encoded PowerShell command detected
 MITRE: T1059.001 – PowerShell
 
 
-🧠 What I Learned
+🧠 What I Learned:
 
 How SIEM collects and correlates logs
 
@@ -107,7 +107,7 @@ How to map detections to MITRE ATT&CK
 How to write SOC-style incident notes
 
 
-📂 Repository Structure
+📂 Repository Structure:
 
 SOC-Wazuh-HomeLab
 
